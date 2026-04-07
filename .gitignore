@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+movies.pkl
+similarity.pkl
+backend/movies.pkl
+backend/similarity.pkl

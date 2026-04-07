@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Re:Genre — Discover Your Next Obsession</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080c0a;
+    --deep: #0b110d;
+    --card-bg: #0f1a12;
+    --green: #00e56b;
+    --green-dim: #00c45a;
+    --green-muted: #1a3d26;
+    --green-glow: rgba(0, 229, 107, 0.18);
+    --text: #e8f5ec;
+    --text-muted: #7aaa8a;
+    --border: rgba(0, 229, 107, 0.12);
+    --border-hover: rgba(0, 229, 107, 0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 10%, rgba(0,229,107,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,229,107,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(0,180,80,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    background: rgba(8,12,10,0.72);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .logo span { color: var(--green); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-cta { display: flex; align-items: center; gap: 0.7rem; }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 7px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+
+  .btn-primary {
+    background: var(--green);
+    border: none;
+    color: #000;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 7px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--green-dim); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 120px 5% 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    max-width: 1200px;
+  }
+  .hero-content { flex: 1 1 0; min-width: 0; }
+
+  .hero-poster-wrap {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-poster-wrap img {
+    width: 260px;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,229,107,0.18), 0 0 40px rgba(0,229,107,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .hero-poster-wrap img:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 28px 70px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,229,107,0.35), 0 0 60px rgba(0,229,107,0.18);
+  }
+  .hero-poster-label {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-poster-label span { color: var(--green); }
+
+  @media (max-width: 768px) {
+    .hero-poster-wrap {  display: none; }
+    .hero-poster-wrap img { width: 180px; opacity: 0;}
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,229,107,0.08);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 .accent { color: var(--green); }
+
+  .hero p {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; align-items: center; }
+
+  .btn-hero {
+    background: var(--green);
+    color: #000;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-hero:hover { background: var(--green-dim); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,107,0.25); }
+
+  .btn-hero-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-hero-ghost:hover { border-color: var(--border-hover); color: var(--text); }
+
+  .hero-stats { display: flex; gap: 2.5rem; margin-top: 2.5rem; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* SLIDER */
+  .section-label {
+    padding: 0 5%;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  .section-label h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .section-label h2 span { color: var(--green); }
+
+  .slider-outer {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    padding: 10px 0 20px;
+  }
+  .slider-outer::before, .slider-outer::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .slider-outer::before { left: 0; background: linear-gradient(to right, var(--black), transparent); }
+  .slider-outer::after  { right: 0; background: linear-gradient(to left, var(--black), transparent); }
+
+  .slider-track {
+    display: flex;
+    gap: 18px;
+    padding: 0 5%;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    will-change: transform;
+  }
+
+  .movie-card {
+    flex: 0 0 220px;
+    height: 310px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    cursor: pointer;
+    transition: transform 0.28s, border-color 0.28s, box-shadow 0.28s;
+  }
+  .movie-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--border-hover);
+    box-shadow: 0 16px 40px rgba(0,229,107,0.15);
+  }
+
+  .card-visual {
+    width: 100%; height: 100%;
+    display: flex; align-items: flex-end;
+    padding: 16px;
+    background: var(--card-bg);
+    position: relative;
+  }
+  .card-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+  }
+  .card-visual::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(8,12,10,0.95), transparent);
+  }
+
+  .cv1::before { background: linear-gradient(135deg, #0a2e1a 0%, #022212 40%, #051a0e 70%, #001a0a 100%); }
+  .cv2::before { background: linear-gradient(160deg, #0d2b1a 0%, #001f10 50%, #0a1a0e 100%); }
+  .cv3::before { background: linear-gradient(120deg, #071f11 0%, #0e2e18 50%, #021510 100%); }
+  .cv4::before { background: linear-gradient(145deg, #0b2819 0%, #042016 50%, #001810 100%); }
+  .cv5::before { background: linear-gradient(110deg, #0d2e1c 0%, #021a0e 50%, #081a10 100%); }
+  .cv6::before { background: linear-gradient(155deg, #0a2416 0%, #042818 50%, #021210 100%); }
+  .cv7::before { background: linear-gradient(130deg, #0e3020 0%, #031a10 60%, #0a2016 100%); }
+  .cv8::before { background: linear-gradient(125deg, #072010 0%, #0b2e1a 50%, #031810 100%); }
+
+  .card-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.25;
+  }
+  .cs1 { width: 140px; height: 140px; top: -20px; right: -30px; background: radial-gradient(var(--green), transparent 70%); }
+  .cs2 { width: 90px; height: 90px; top: 40px; left: 20px; background: radial-gradient(rgba(0,229,107,0.5), transparent 70%); }
+  .cs3 { width: 180px; height: 180px; top: -50px; left: -40px; background: radial-gradient(var(--green), transparent 70%); }
+  .cs4 { width: 100px; height: 100px; top: 20px; right: 10px; background: radial-gradient(rgba(0,229,107,0.4), transparent 70%); }
+  .cs5 { width: 160px; height: 80px; top: 30px; left: -20px; background: radial-gradient(var(--green), transparent 70%); border-radius: 40%; }
+  .cs6 { width: 120px; height: 120px; top: 10px; right: -20px; background: radial-gradient(rgba(0,229,107,0.45), transparent 70%); }
+  .cs7 { width: 200px; height: 200px; top: -80px; right: -60px; background: radial-gradient(var(--green), transparent 70%); }
+  .cs8 { width: 80px; height: 80px; top: 50px; left: 30px; background: radial-gradient(rgba(0,229,107,0.5), transparent 70%); }
+
+  .card-info { position: relative; z-index: 2; width: 100%; }
+  .card-genre {
+    display: inline-block;
+    background: rgba(0,229,107,0.14);
+    border: 1px solid rgba(0,229,107,0.2);
+    color: var(--green);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+  }
+  .card-rating { color: var(--green); font-weight: 600; }
+  .card-dot { opacity: 0.4; }
+
+  /* SEARCH SECTION */
+  .search-section {
+    position: relative;
+    padding: 60px 5%;
+    scroll-margin-top: 80px;
+  }
+  .search-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .search-section h2 .accent { color: var(--green); }
+  .search-section > p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .search-box-wrap {
+    position: relative;
+    max-width: 620px;
+    z-index: 50;
+  }
+  .search-icon-main {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    font-size: 1rem;
+  }
+  #main-search {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 50px 16px 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  #main-search::placeholder { color: rgba(122,170,138,0.4); }
+  #main-search:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(0,229,107,0.08);
+  }
+  .search-kbd {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #000;
+    background: var(--green);
+    border: none;
+    border-radius: 5px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .search-kbd:hover { background: var(--green-dim); }
+
+  /* AUTOCOMPLETE DROPDOWN */
+  .autocomplete-dropdown {
+    position: fixed;
+    background: var(--card-bg);
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    overflow-y: auto;
+    z-index: 99999;
+    display: none;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+    animation: fadeIn 0.15s ease;
+  }
+  .autocomplete-dropdown.visible { display: block; }
+
+  .autocomplete-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid var(--border);
+  }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .autocomplete-item:hover, .autocomplete-item.highlighted {
+    background: rgba(0,229,107,0.07);
+  }
+  .autocomplete-item-icon {
+    font-size: 0.9rem;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+  .autocomplete-item-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .autocomplete-item-title mark {
+    background: transparent;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .search-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  .tag {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tag:hover, .tag.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(0,229,107,0.06);
+  }
+
+  /* RESULTS PANEL */
+  .results-panel {
+    max-width: 780px;
+    margin-top: 20px;
+    display: none;
+  }
+  .results-panel.visible { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .results-grid { display: flex; gap: 14px; }
+  .result-card { flex: 1; cursor: pointer; transition: transform 0.22s; }
+  .result-card:hover { transform: translateY(-5px); }
+
+  .result-poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .result-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .result-poster .poster-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: var(--green-muted);
+    gap: 8px;
+  }
+  .result-poster .poster-fallback span { font-size: 2rem; }
+
+  .result-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 8px;
+    text-align: center;
+    line-height: 1.3;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .no-results {
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  /* GENRES */
+  .genres-section {
+    position: relative; z-index: 1;
+    padding: 20px 5% 60px;
+  }
+  .genres-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    letter-spacing: -0.01em;
+  }
+  .genres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    justify-content: center;
+  }
+  .genre-pill {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.22s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .genre-pill:hover {
+    border-color: var(--border-hover);
+    background: rgba(0,229,107,0.05);
+    transform: translateY(-2px);
+  }
+  .genre-name { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.02em; }
+
+  /* TRENDING */
+  .trending-section {
+    scroll-margin-top: 100px;
+    position: relative; z-index: 1;
+    padding: 0 5% 60px;
+  }
+  .trending-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  .trending-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 800px) {
+    .trending-strip { grid-template-columns: repeat(2, 1fr); }
+    nav .nav-links { display: none; }
+    .hero { padding-top: 110px; }
+  }
+  .trend-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .trend-item:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+  .trend-rank {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: rgba(0,229,107,0.2);
+    min-width: 28px;
+    line-height: 1;
+  }
+  .trend-title { font-size: 0.8rem; font-weight: 600; line-height: 1.3; margin-bottom: 2px; }
+  .trend-genre { font-size: 0.68rem; color: var(--text-muted); }
+
+  /* WATCHLIST CTA */
+  .watchlist-cta {
+    position: relative; z-index: 1;
+    margin: 0 5% 60px;
+    background: linear-gradient(135deg, rgba(0,229,107,0.08) 0%, rgba(0,229,107,0.03) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .watchlist-cta h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .watchlist-cta p { font-size: 0.85rem; color: var(--text-muted); max-width: 380px; }
+  .watchlist-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 5%;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-brand .logo { font-size: 1.2rem; margin-bottom: 0.8rem; display: block; }
+  .footer-brand p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.7; max-width: 240px; }
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li {
+    margin-bottom: 0.55rem;
+    font-size: 0.8rem;
+    color: rgba(122,170,138,0.6);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .footer-col ul li:hover { color: var(--text); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-legal { font-size: 0.72rem; color: rgba(122,170,138,0.4); line-height: 1.8; }
+  .footer-legal a { color: rgba(122,170,138,0.5); text-decoration: none; }
+  .footer-legal a:hover { color: var(--green); }
+  .footer-badges { display: flex; gap: 10px; }
+  .badge-item {
+    background: rgba(0,229,107,0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-hover);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    color: var(--text);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--green-muted); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">Re<span>:</span>Genre</span>
+  <ul class="nav-links">
+    <li><a href="#search-section">Search</a></li>
+    <li><a href="#trending-section">Trending</a></li>
+    <li><a href="#watchlist-cta">Watchlist</a></li>
+    <li><a href="#hero" onclick="showToast('👤 Sign In coming soon')">Sign In</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn-ghost" onclick="showToast('👤 Sign In coming soon')">Sign In</button>
+    <button class="btn-primary" onclick="showToast('👤 Get Started coming soon')">Get Started</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id = "hero">
+  <div class="hero-content">
+    <div class="hero-badge">AI-Powered Discovery</div>
+    <h1>Find movies that<br><span class="accent">match your mood.</span></h1>
+    <p>Re:Genre uses intelligent genre mapping to surface the films you didn't know you needed. No ratings pressure. No algorithm noise.</p>
+    <div class="hero-actions">
+      <button class="btn-hero" onclick="document.getElementById('main-search').focus()">Explore Now</button>
+      <button class="btn-hero-ghost" onclick="showToast('▶ Trailer mode coming soon')">
+        <span style="color:var(--green)">▶</span> How it works
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">12K+</div>
+        <div class="stat-label">Films indexed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">42</div>
+        <div class="stat-label">Genre nodes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Match accuracy</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-poster-wrap">
+    <div>
+      <img src="interstellar.webp" alt="Now Featuring">
+      <div class="hero-poster-label">Now Featuring · <span>interstellar</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDER -->
+<div class="section-label">
+  <h2><span>●</span> Now Featuring</h2>
+  <span style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.06em;">AUTO-SCROLLING</span>
+</div>
+<div class="slider-outer">
+  <div class="slider-track" id="slider-track"></div>
+</div>
+
+<!-- SEARCH SECTION -->
+<section class="search-section" id="search-section">
+  <h2>Discover your <span class="accent">next obsession.</span></h2>
+  <p>Search by title, theme, director, era, or mood — Re:Genre understands context.</p>
+  <div class="search-box-wrap">
+    <span class="search-icon-main">⌕</span>
+    <input type="text" id="main-search" placeholder="Try 'avatar' or 'avengers'…" oninput="handleSearch(this.value)" autocomplete="off">
+    <button class="search-kbd" onclick="handleSearch(document.getElementById('main-search').value)">Search</button>
+  </div>
+  <div class="search-tags">
+    <span class="tag" onclick="setSearch('Psychological Thriller')">Psychological Thriller</span>
+    <span class="tag" onclick="setSearch('Neo-Noir')">Neo-Noir</span>
+    <span class="tag" onclick="setSearch('Sci-Fi Drama')">Sci-Fi Drama</span>
+    <span class="tag" onclick="setSearch('Found Footage')">Found Footage</span>
+    <span class="tag" onclick="setSearch('Art House')">Art House</span>
+    <span class="tag" onclick="setSearch('Crime')">Crime</span>
+    <span class="tag" onclick="setSearch('Horror')">Horror</span>
+  </div>
+  <div class="results-panel" id="results-panel"></div>
+</section>
+
+<!-- GENRES -->
+<section class="genres-section">
+  <h2>Browse by Genre</h2>
+  <div class="genres-grid" id="genres-grid"></div>
+</section>
+
+<!-- TRENDING -->
+<section class="trending-section" id="trending-section">
+  <h2>Trending This Week</h2>
+  <div class="trending-strip" id="trending-strip"></div>
+</section>
+
+<!-- WATCHLIST CTA -->
+<div class="watchlist-cta" id="watchlist-cta">
+  <div>
+    <h3>Build your Watchlist.</h3>
+    <p>Save films, track what you've seen, and get smarter recommendations the more you use Re:Genre.</p>
+  </div>
+  <div class="watchlist-actions">
+    <button class="btn-ghost" onclick="showToast('📋 Guest mode — sign in to save')">Continue as Guest</button>
+    <button class="btn-primary" onclick="showToast('🚀 Account creation coming soon')">Create Account</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">Re<span>:</span>Genre</span>
+      <p>Intelligent movie discovery powered by genre intelligence and contextual matching. Not affiliated with any streaming platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Discover</h4>
+      <ul>
+        <li>Trending Now</li><li>New Releases</li><li>Hidden Gems</li><li>Genre Maps</li><li>Curated Lists</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li>How it Works</li><li>API Access</li><li>Mobile App</li><li>Browser Extension</li><li>Changelog</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li>Privacy Policy</li><li>Terms of Service</li><li>Cookie Settings</li><li>DMCA Policy</li><li>Contact</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      © 2025 Re:Genre Technologies, Inc. All rights reserved.<br>
+      Movie metadata sourced under license. Re:Genre does not host or stream any content.<br>
+      <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Accessibility</a> · <a href="#">Sitemap</a>
+    </div>
+    <div class="footer-badges">
+      <span class="badge-item">SSL Secured</span>
+      <span class="badge-item">GDPR Ready</span>
+      <span class="badge-item">v2.4.1</span>
+    </div>
+  </div>
+</footer>
+
+<!-- AUTOCOMPLETE DROPDOWN (body-level to escape all stacking contexts) -->
+<div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-dot"></span>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+// ── CONFIG ──
+const BACKEND_URL = 'http://127.0.0.1:8000'; // Change to your deployed URL if needed
+
+// ── SLIDER DATA ──
+const sliderMovies = [
+  { title: "Fractured Signal", genre: "Sci-Fi Thriller", year: "2023", rating: "8.4", visual: "cv1", shape: "cs1" },
+  { title: "Hollow Meridian", genre: "Neo-Noir", year: "2022", rating: "7.9", visual: "cv2", shape: "cs2" },
+  { title: "The Quiet Descent", genre: "Psychological Horror", year: "2024", rating: "8.1", visual: "cv3", shape: "cs3" },
+  { title: "Amber Protocol", genre: "Crime Drama", year: "2023", rating: "7.7", visual: "cv4", shape: "cs4" },
+  { title: "Zero Latitude", genre: "Survival Thriller", year: "2023", rating: "8.3", visual: "cv5", shape: "cs5" },
+  { title: "Pale Architecture", genre: "Art House Drama", year: "2024", rating: "7.5", visual: "cv6", shape: "cs6" },
+  { title: "Nightsector", genre: "Cyberpunk Noir", year: "2022", rating: "8.6", visual: "cv7", shape: "cs7" },
+  { title: "Dissolve", genre: "Slow Cinema", year: "2024", rating: "7.2", visual: "cv8", shape: "cs8" },
+  { title: "Iron Remembrance", genre: "Historical Drama", year: "2023", rating: "8.0", visual: "cv1", shape: "cs3" },
+  { title: "Depth Charge", genre: "Action Thriller", year: "2024", rating: "7.8", visual: "cv2", shape: "cs4" },
+];
+
+const genres = [
+  "Drama","Thriller","Horror","Sci-Fi","Crime","Mystery","Neo-Noir","Art House","Slow Cinema","Historical","Dark Comedy","Psychological"
+];
+
+const trending = [
+  { rank: "01", title: "Fractured Signal", genre: "Sci-Fi · 2023" },
+  { rank: "02", title: "Nightsector", genre: "Cyberpunk · 2022" },
+  { rank: "03", title: "Zero Latitude", genre: "Thriller · 2023" },
+  { rank: "04", title: "The Quiet Descent", genre: "Horror · 2024" },
+  { rank: "05", title: "Amber Protocol", genre: "Crime · 2023" },
+];
+
+// ── BUILD SLIDER ──
+const track = document.getElementById('slider-track');
+[...sliderMovies, ...sliderMovies].forEach(m => {
+  track.innerHTML += `
+    <div class="movie-card" onclick="showToast('🎬 ${m.title} added to watchlist')">
+      <div class="card-visual ${m.visual}">
+        <div class="card-shape ${m.shape}"></div>
+        <div class="card-info">
+          <span class="card-genre">${m.genre}</span>
+          <div class="card-title">${m.title}</div>
+          <div class="card-meta">
+            <span class="card-rating">★ ${m.rating}</span>
+            <span class="card-dot">·</span>
+            <span>${m.year}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+});
+
+// ── AUTO-SLIDE ──
+let slideIndex = 0;
+const CARD_W = 238;
+function autoSlide() {
+  slideIndex = (slideIndex + 1) % sliderMovies.length;
+  track.style.transform = `translateX(-${slideIndex * CARD_W}px)`;
+}
+setInterval(autoSlide, 2000);
+
+// ── GENRES GRID ──
+const gg = document.getElementById('genres-grid');
+genres.forEach(g => {
+  gg.innerHTML += `<div class="genre-pill"><span class="genre-name">${g}</span></div>`;
+});
+
+// ── TRENDING ──
+const ts = document.getElementById('trending-strip');
+trending.forEach(t => {
+  ts.innerHTML += `
+    <div class="trend-item" onclick="showToast('🎬 ${t.title}')">
+      <span class="trend-rank">${t.rank}</span>
+      <div class="trend-info">
+        <div class="trend-title">${t.title}</div>
+        <div class="trend-genre">${t.genre}</div>
+      </div>
+    </div>`;
+});
+
+// ── AUTOCOMPLETE from movies.json ──
+// Generate this file once by running in Python:
+//   import pickle, json
+//   movies = pickle.load(open('movies.pkl', 'rb'))
+//   movies[['id','title']].to_json('movies.json', orient='records')
+let movieTitles = [];
+
+fetch('movies.json')
+  .then(r => r.json())
+  .then(data => {
+    movieTitles = data.map(item => ({ id: item.id, title: item.title }));
+  })
+  .catch(() => {
+    movieTitles = [];
+  });
+
+let highlightedIndex = -1;
+
+function positionDropdown() {
+  const input = document.getElementById('main-search');
+  const dropdown = document.getElementById('autocomplete-dropdown');
+  const rect = input.getBoundingClientRect();
+  dropdown.style.top = (rect.bottom + 6) + 'px';
+  dropdown.style.left = rect.left + 'px';
+  dropdown.style.width = rect.width + 'px';
+}
+
+function showAutocomplete(query) {
+  const dropdown = document.getElementById('autocomplete-dropdown');
+  if (!query.trim() || movieTitles.length === 0) {
+    dropdown.classList.remove('visible');
+    dropdown.innerHTML = '';
+    return;
+  }
+
+  const q = query.toLowerCase();
+  const matches = movieTitles
+    .filter(m => m.title.toLowerCase().includes(q))
+    .slice(0, 5);
+
+  if (matches.length === 0) {
+    dropdown.classList.remove('visible');
+    dropdown.innerHTML = '';
+    return;
+  }
+
+  dropdown.innerHTML = matches.map((m, i) => {
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const highlighted = m.title.replace(regex, '<mark>$1</mark>');
+    return `
+      <div class="autocomplete-item" data-title="${m.title}" data-index="${i}"
+           onmousedown="selectAutocomplete('${m.title.replace(/'/g, "\\'")}')">
+        <span class="autocomplete-item-icon"></span>
+        <span class="autocomplete-item-title">${highlighted}</span>
+      </div>`;
+  }).join('');
+
+  highlightedIndex = -1;
+  positionDropdown();
+  dropdown.classList.add('visible');
+}
+
+// ── SELECT from autocomplete → fetch recommendations ──
+function selectAutocomplete(title) {
+  document.getElementById('main-search').value = title;
+  document.getElementById('autocomplete-dropdown').classList.remove('visible');
+  fetchRecommendations(title);
+}
+
+// Keyboard navigation for dropdown
+document.getElementById('main-search').addEventListener('keydown', function(e) {
+  const dropdown = document.getElementById('autocomplete-dropdown');
+  const items = dropdown.querySelectorAll('.autocomplete-item');
+
+  if (e.key === 'Enter' && !dropdown.classList.contains('visible')) {
+    // No dropdown open — fire recommendation directly
+    const val = this.value.trim();
+    if (val) fetchRecommendations(val);
+    return;
+  }
+
+  if (!dropdown.classList.contains('visible') || items.length === 0) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    highlightedIndex = Math.max(highlightedIndex - 1, -1);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (highlightedIndex >= 0) {
+      selectAutocomplete(items[highlightedIndex].dataset.title);
+    } else {
+      // Enter with no highlight — use typed value directly
+      dropdown.classList.remove('visible');
+      fetchRecommendations(this.value.trim());
+    }
+    return;
+  } else if (e.key === 'Escape') {
+    dropdown.classList.remove('visible');
+    highlightedIndex = -1;
+    return;
+  }
+
+  items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightedIndex));
+});
+
+// ── SEARCH INPUT — only drives autocomplete, not backend ──
+function handleSearch(val) {
+  showAutocomplete(val);
+  if (!val.trim()) {
+    document.getElementById('results-panel').classList.remove('visible');
+  }
+}
+
+// ── Search button click ──
+document.querySelector('.search-kbd').addEventListener('click', () => {
+  const val = document.getElementById('main-search').value.trim();
+  if (val) fetchRecommendations(val);
+});
+
+// ── FETCH RECOMMENDATIONS from your FastAPI backend ──
+async function fetchRecommendations(movieTitle) {
+  const panel = document.getElementById('results-panel');
+  panel.innerHTML = `<div class="no-results">Finding recommendations for <strong>${movieTitle}</strong>…</div>`;
+  panel.classList.add('visible');
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/recommend?movie=${encodeURIComponent(movieTitle)}`);
+
+    if (!res.ok) {
+      panel.innerHTML = `<div class="no-results">Movie not found in dataset. Try an exact title from autocomplete.</div>`;
+      return;
+    }
+
+    const data = await res.json();
+    const results = data.results || [];
+
+    if (results.length === 0) {
+      panel.innerHTML = `<div class="no-results">No recommendations found for "<strong>${movieTitle}</strong>".</div>`;
+    } else {
+      panel.innerHTML = `
+        <div style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;">
+          Because you searched · <span style="color:var(--green)">${movieTitle}</span>
+        </div>
+        <div class="results-grid">${results.map(m => {
+          const poster = m.poster
+            ? `<img src="${m.poster}" alt="${m.title}" loading="lazy">`
+            : `<div class="poster-fallback"><span>🎬</span></div>`;
+          return `
+            <div class="result-card" onclick="showToast('🎬 ${m.title.replace(/'/g,"\\'")}')">
+              <div class="result-poster">${poster}</div>
+              <div class="result-card-title">${m.title}</div>
+            </div>`;
+        }).join('')}</div>`;
+    }
+  } catch(e) {
+    panel.innerHTML = `<div class="no-results">Could not reach backend. Make sure <code>uvicorn main:app --reload</code> is running.</div>`;
+  }
+}
+
+function setSearch(val) {
+  document.getElementById('main-search').value = val;
+  document.getElementById('autocomplete-dropdown').classList.remove('visible');
+  fetchRecommendations(val);
+  document.getElementById('main-search').focus();
+  document.querySelectorAll('.tag').forEach(t => {
+    t.classList.toggle('active', t.textContent === val);
+  });
+}
+
+// Close dropdown and results when clicking outside
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.search-box-wrap');
+  const panel = document.getElementById('results-panel');
+  const dropdown = document.getElementById('autocomplete-dropdown');
+  if (wrap && !wrap.contains(e.target)) {
+    panel.classList.remove('visible');
+    dropdown.classList.remove('visible');
+  }
+});
+
+// Reposition dropdown on scroll or resize
+window.addEventListener('scroll', () => {
+  const dropdown = document.getElementById('autocomplete-dropdown');
+  if (dropdown.classList.contains('visible')) positionDropdown();
+}, true);
+window.addEventListener('resize', () => {
+  const dropdown = document.getElementById('autocomplete-dropdown');
+  if (dropdown.classList.contains('visible')) positionDropdown();
+});
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
